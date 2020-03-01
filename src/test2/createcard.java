@@ -72,7 +72,7 @@ public class createcard extends JFrame {
 		cardHolderNameLbl.setText("Card Holder Name");
 		cardHolderName.setBounds(220,160, 150,30);
 		expiryDateLbl.setBounds(70,220, 150,30);
-		expiryDateLbl.setText("Expiry Date (dd-mm-yyyy)");
+		expiryDateLbl.setText("Expiry Date (YY/MM)");
 		expiryDate.setBounds(220,220, 150,30);
 		submit.setText("Create");
 		submit.setBounds(215,300, 100,30);
@@ -100,7 +100,7 @@ public class createcard extends JFrame {
 					JOptionPane.showMessageDialog(contentPane, "Details Empty");
 					return;
 				}
-				// checks if the date follows the dd-mm-yyyy format
+				// checks if the date follows the YY/MM format
 				if(!isDateValid(expiryDate.getText())) {
 					JOptionPane.showMessageDialog(contentPane, "Invalid Date");
 					return;
@@ -157,24 +157,18 @@ public class createcard extends JFrame {
 		
 
 	}
-// check is date follows the dd-mm-yyyy format
+// check is date follows the YY/MM format
 	public boolean isDateValid(String date){
 		
-		Date today = new Date();
-		if(date==null) {
+		if(!date.matches("\\d\\d\\/\\d\\d")) {
 			return false;
 		}
-		SimpleDateFormat sd = new SimpleDateFormat("dd-mm-yyyy");
-		sd.setLenient(false);
-		try {
-			Date d = sd.parse(date);
-			
-		} catch (java.text.ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return false;
-		}
-		return true;
+		int year = Integer.parseInt(date.split("/")[0]);
+        int month = Integer.parseInt(date.split("/")[1]);
+        if(month>12) {
+        	return false;
+        }
+        return true;
 	}
 	
 	// checks if a string has numbers
