@@ -3,6 +3,7 @@ package test2;
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.FlowLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.Statement;
@@ -103,46 +104,27 @@ public class login extends JFrame {
 				}
 				
 				String sql = "Select * from users where username = '"+username.getText()+"' AND password = '"+password.getText()+"'";
-				Connection conn = null;  
-		        try {  
-		            // db parameters  
-		            String url = "jdbc:sqlite:db\\testdb.db";  
-		            // create a connection to the database  
-		            conn = DriverManager.getConnection(url);  
-		            java.sql.Statement stmt = conn.createStatement();
-			         // execute query
-			         ResultSet rs = stmt.executeQuery(sql);
-			         // if result set is empty then user does not exist
-			         if(rs.next()) {
-			        	 // sets logged in user
-			        	 home.userLoggedIn = username.getText();
-			        	 new home().setVisible(true);
+				database db = new database();
+				db.connect();
+				ResultSet rs = db.executeQuery(sql);
+		        try {
+					if(rs.next()) 
+					{
+					   // sets logged in user
+						home.userLoggedIn = username.getText();
+					    new home().setVisible(true);
 						dispose();
-			        	 
-			         }else {
-			        	 JOptionPane.showMessageDialog(contentPane, "User Not Found");
-			         }
-			 
-			          
-		             
-		              
-		        } catch (SQLException e1) {  
-		            System.out.println(e1.getMessage());  
-		        } finally {  
-		            try {  
-		                if (conn != null) {  
-		                    conn.close();  
-		                }  
-		            } catch (SQLException ex) {  
-		                System.out.println(ex.getMessage());  
-		            }  
-		        }
-		        
-		        
-		        
-				
-				
-				
+					    	 
+					}else {
+					    	 JOptionPane.showMessageDialog(contentPane, "User Not Found");
+					     }
+				} catch (HeadlessException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 			
 			
